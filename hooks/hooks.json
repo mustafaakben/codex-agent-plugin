@@ -1,0 +1,37 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Check if this project has a .codex/config.toml file. If it is missing and Codex functionality is needed, ask the user for confirmation before creating or modifying project files."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "^(mcp__codex-native__codex|mcp__codex-native__codex-reply)$",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Before using Codex MCP tools, verify that .codex/config.toml exists in the project. If it is missing, ask for user confirmation before bootstrapping configuration files."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__codex-native__codex",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "After Codex execution, check if a threadId was returned in the response. If so, note it for potential follow-up queries using mcp__codex-native__codex-reply. Also review the output for any errors or warnings that should be reported to the user."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "codex-native": {
+      "command": "codex",
+      "args": ["mcp-server"],
+      "env": {}
+    }
+  }
+}

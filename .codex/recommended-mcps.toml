@@ -1,0 +1,61 @@
+# ============================================================================
+# Recommended MCP Servers for Codex (agent-codex)
+# ============================================================================
+# This list is intentionally conservative and includes package references that
+# are currently resolvable. Add additional servers manually as needed.
+# ============================================================================
+
+[context7]
+description = "Up-to-date developer documentation for popular libraries and frameworks"
+category = "documentation"
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+startup_timeout_sec = 10
+tool_timeout_sec = 60
+use_case = "When you need current documentation for React, Next.js, TypeScript, etc."
+
+[playwright]
+description = "Browser automation and testing"
+category = "browser"
+command = "npx"
+args = ["-y", "@playwright/mcp"]
+startup_timeout_sec = 15
+tool_timeout_sec = 120
+use_case = "E2E testing, web automation, and browser workflows"
+
+[postgres]
+description = "PostgreSQL database operations"
+category = "database"
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-postgres"]
+env_vars = ["DATABASE_URL"]
+startup_timeout_sec = 10
+tool_timeout_sec = 60
+use_case = "Query and manage PostgreSQL databases"
+
+[filesystem]
+description = "Extended file system access beyond working directory"
+category = "filesystem"
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-filesystem"]
+startup_timeout_sec = 5
+tool_timeout_sec = 30
+use_case = "When you need access to files outside the workspace"
+note = "Append allowed paths to args, e.g. [\"-y\", \"@modelcontextprotocol/server-filesystem\", \"/path1\"]"
+
+[github]
+description = "GitHub API integration - issues, PRs, repos, actions"
+category = "vcs"
+type = "sse"
+url = "https://mcp.github.com/sse"
+use_case = "GitHub operations: create issues, review PRs, manage repos"
+auth = "OAuth (automatic)"
+
+# ============================================================================
+# Usage notes
+# ============================================================================
+# 1. Copy the server block into .codex/config.toml under [mcp_servers.<name>]
+# 2. Remove documentation-only fields (description/category/use_case/note)
+# 3. Set required environment variables
+# 4. Restart Codex
+# ============================================================================

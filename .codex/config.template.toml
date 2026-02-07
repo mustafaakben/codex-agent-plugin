@@ -1,0 +1,79 @@
+# ============================================================================
+# Codex CLI Configuration Template for agent-codex
+# ============================================================================
+# Use this template to bootstrap .codex/config.toml in a target project.
+# Active settings are enabled by default; curated MCP servers are disabled
+# and can be uncommented as needed.
+# ============================================================================
+
+# Core settings
+model = "gpt-5.2-codex"
+model_reasoning_effort = "high"
+sandbox = "workspace-write"
+approval_policy = "on-request"
+
+# Optional feature flags
+web_search = "live"
+
+[features]
+# Enable other features as needed
+
+# ============================================================================
+# Curated MCP servers (verified package names)
+# ============================================================================
+
+# Context7 documentation MCP
+# [mcp_servers.context7]
+# command = "npx"
+# args = ["-y", "@upstash/context7-mcp"]
+# startup_timeout_sec = 10
+# tool_timeout_sec = 60
+
+# Playwright MCP
+# [mcp_servers.playwright]
+# command = "npx"
+# args = ["-y", "@playwright/mcp"]
+# startup_timeout_sec = 15
+# tool_timeout_sec = 120
+
+# PostgreSQL MCP
+# Required: DATABASE_URL
+# [mcp_servers.postgres]
+# command = "npx"
+# args = ["-y", "@modelcontextprotocol/server-postgres"]
+# startup_timeout_sec = 10
+# tool_timeout_sec = 60
+
+# Filesystem MCP (grant explicit allowed paths)
+# [mcp_servers.filesystem]
+# command = "npx"
+# args = ["-y", "@modelcontextprotocol/server-filesystem", "/allowed/path"]
+# startup_timeout_sec = 5
+# tool_timeout_sec = 30
+
+# GitHub MCP over SSE (OAuth)
+# [mcp_servers.github]
+# type = "sse"
+# url = "https://mcp.github.com/sse"
+
+# ============================================================================
+# Profiles
+# ============================================================================
+
+# [profiles.fast]
+# model = "gpt-5.2-codex"
+# model_reasoning_effort = "medium"
+
+# [profiles.thorough]
+# model = "gpt-5.2-codex"
+# model_reasoning_effort = "xhigh"
+
+# [profiles.security]
+# model = "gpt-5.1-codex-max"
+# model_reasoning_effort = "xhigh"
+# sandbox = "read-only"
+
+# [profiles.automated]
+# model = "gpt-5.2-codex"
+# approval_policy = "never"
+# sandbox = "workspace-write"
