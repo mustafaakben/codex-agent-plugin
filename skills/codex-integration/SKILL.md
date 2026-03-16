@@ -17,9 +17,9 @@ Before Codex operations:
 ## Default configuration
 
 ```toml
-model = "gpt-5.2-codex"
-model_reasoning_effort = "high"
-sandbox = "workspace-write"
+model = "gpt-5.4"
+model_reasoning_effort = "xhigh"
+sandbox_mode = "workspace-write"
 approval_policy = "on-request"
 ```
 
@@ -45,20 +45,32 @@ Use background execution for long tasks and summarize results after completion.
 
 ## Model selection
 
-- Simple: `gpt-5.2-codex` + medium reasoning
-- Medium: `gpt-5.2-codex` + high reasoning
-- Complex: `gpt-5.2-codex` + xhigh reasoning
-- Critical/security: `gpt-5.1-codex-max` + xhigh reasoning
+- Simple: `gpt-5.4` + low reasoning
+- Medium: `gpt-5.4` + medium reasoning
+- Complex: `gpt-5.4` + high reasoning
+- Critical/security: `gpt-5.4` + xhigh reasoning
+
+## Prompt guidance
+
+When crafting prompts for Codex, follow the GPT-5.4 prompt patterns in `references/codex-prompt-guidance.md`. Key patterns:
+- Use **output contracts** to constrain what and how much the model outputs.
+- Use **tool persistence rules** so Codex doesn't stop early.
+- Use **completeness contracts** for multi-step or batch tasks.
+- Use **verification loops** before finalizing results.
+- For coding tasks, apply **autonomy & persistence** — Codex should carry changes through implementation, not stop at analysis.
 
 ## Best practices
 
-1. Keep prompts specific.
+1. Keep prompts specific — follow prompt guidance patterns.
 2. Validate outputs before applying.
 3. Ask before enabling MCP servers or writing config files.
 4. Enable only MCPs needed for the current task.
+5. Use dependency checking for multi-step workflows.
+6. Apply action safety frames for irreversible operations.
 
 ## References
 
-- `references/codex-cli-reference.md`
-- `examples/delegation-patterns.md`
-- `skills/codex-ecosystem/SKILL.md`
+- `references/codex-cli-reference.md` — CLI commands, flags, config
+- `references/codex-prompt-guidance.md` — GPT-5.4 prompt patterns and best practices
+- `examples/delegation-patterns.md` — delegation examples
+- `skills/codex-ecosystem/SKILL.md` — bootstrap and MCP setup

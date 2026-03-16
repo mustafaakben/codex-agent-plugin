@@ -24,8 +24,12 @@ allowed-tools:
 
 ## Execution guidance
 
-- Use `codex exec` in `read-only` sandbox mode.
-- Use JSON output for structured parsing.
+- Use the native `codex review` command (preferred) or `codex exec review` for non-interactive output.
+- Common patterns:
+  - `codex review --uncommitted` — review uncommitted changes
+  - `codex review --base main` — review against a branch
+  - `codex review --commit SHA` — review a specific commit
+  - `codex exec review --uncommitted --json -o review.md` — non-interactive with JSON output
 - Include concrete findings and actionable fixes.
 
 ## Output sections

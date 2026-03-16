@@ -101,9 +101,9 @@ Installed plugins commonly expose namespaced commands. Use:
 ### Defaults
 
 ```toml
-model = "gpt-5.2-codex"
-model_reasoning_effort = "high"
-sandbox = "workspace-write"
+model = "gpt-5.4"
+model_reasoning_effort = "xhigh"
+sandbox_mode = "workspace-write"
 approval_policy = "on-request"
 ```
 

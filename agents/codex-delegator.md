@@ -37,10 +37,10 @@ Ask before enabling MCP blocks in config.
 
 ## Model mapping
 
-- simple: `gpt-5.2-codex`, medium
-- medium: `gpt-5.2-codex`, high
-- complex: `gpt-5.2-codex`, xhigh
-- critical: `gpt-5.1-codex-max`, xhigh
+- simple: `gpt-5.4`, low
+- medium: `gpt-5.4`, medium
+- complex: `gpt-5.4`, high
+- critical: `gpt-5.4`, xhigh
 
 ## Output format
 

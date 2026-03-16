@@ -34,6 +34,26 @@ allowed-tools:
 4. For custom names, append a new block only with user confirmation.
 5. Summarize required environment variables.
 
+## Server types
+
+### STDIO (local process)
+```bash
+codex mcp add <name> -- <command> [args...]
+codex mcp add <name> -- <command> --env KEY=VALUE
+```
+
+### HTTP (remote)
+```bash
+codex mcp add <name> --url <url>
+codex mcp add <name> --url <url> --bearer-token-env-var TOKEN_VAR
+```
+
+### OAuth for HTTP servers
+```bash
+codex mcp login <name>
+codex mcp logout <name>
+```
+
 ## Environment variable reminders
 
 - `postgres`: `DATABASE_URL`

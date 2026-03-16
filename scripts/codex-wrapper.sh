@@ -4,9 +4,9 @@
 
 set -euo pipefail
 
-# Default values (gpt-5.2-codex with high reasoning)
-MODEL="gpt-5.2-codex"
-REASONING="high"
+# Default values (gpt-5.4 with xhigh reasoning)
+MODEL="gpt-5.4"
+REASONING="xhigh"
 SANDBOX="workspace-write"
 TIMEOUT=300
 
@@ -26,7 +26,7 @@ USAGE:
 OPTIONS:
     -c, --complexity    Task complexity: simple|medium|complex|critical
                         Automatically sets model and reasoning effort
-    -m, --model         Override model (gpt-5.2-codex, gpt-5.1-codex-max, gpt-5.1-codex-mini, etc.)
+    -m, --model         Override model (default: gpt-5.4)
     -r, --reasoning     Override reasoning effort (minimal|low|medium|high|xhigh)
     -s, --sandbox       Sandbox mode (read-only|workspace-write|danger-full-access)
     -o, --output        Output file path (optional)
@@ -35,10 +35,10 @@ OPTIONS:
     -h, --help          Show this help message
 
 COMPLEXITY PRESETS:
-    simple      gpt-5.2-codex with medium reasoning (quick fixes)
-    medium      gpt-5.2-codex with high reasoning (features) [DEFAULT]
-    complex     gpt-5.2-codex with xhigh reasoning (architecture)
-    critical    gpt-5.1-codex-max with xhigh reasoning (security-critical)
+    simple      gpt-5.4 with low reasoning (quick fixes)
+    medium      gpt-5.4 with medium reasoning (features)
+    complex     gpt-5.4 with high reasoning (architecture)
+    critical    gpt-5.4 with xhigh reasoning (security-critical) [DEFAULT]
 
 EXAMPLES:
     $(basename "$0") "Fix the typo in README.md"
@@ -66,20 +66,20 @@ log_error() {
 set_complexity() {
     case $1 in
         simple)
-            MODEL="gpt-5.2-codex"
-            REASONING="medium"
+            MODEL="gpt-5.4"
+            REASONING="low"
             ;;
         medium)
-            MODEL="gpt-5.2-codex"
-            REASONING="high"  # Default
+            MODEL="gpt-5.4"
+            REASONING="medium"
             ;;
         complex)
-            MODEL="gpt-5.2-codex"
-            REASONING="xhigh"
+            MODEL="gpt-5.4"
+            REASONING="high"
             ;;
         critical)
-            MODEL="gpt-5.1-codex-max"
-            REASONING="xhigh"
+            MODEL="gpt-5.4"
+            REASONING="xhigh"  # Default
             ;;
         *)
             log_error "Unknown complexity: $1"

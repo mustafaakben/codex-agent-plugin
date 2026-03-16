@@ -14,9 +14,9 @@ The active file `.codex/config.toml` is created in the target project when the u
 ## Default configuration
 
 ```toml
-model = "gpt-5.2-codex"
-model_reasoning_effort = "high"
-sandbox = "workspace-write"
+model = "gpt-5.4"
+model_reasoning_effort = "xhigh"
+sandbox_mode = "workspace-write"
 approval_policy = "on-request"
 ```
 

@@ -13,7 +13,7 @@ Claude receives: "Add input validation to the user form"
 2. Delegate via MCP:
    Tool: mcp__codex-native__codex
    prompt: "Add comprehensive input validation to the user registration form in src/components/UserForm.tsx. Validate email format, password strength (min 8 chars, 1 uppercase, 1 number), and required fields. Show inline error messages."
-   model: "gpt-5.2-codex"
+   model: "gpt-5.4"
    sandbox: "workspace-write"
 
 3. Review Codex output
@@ -65,23 +65,23 @@ Adjust model based on task complexity.
 
 ```
 Simple task (typo fix):
-  model: gpt-5.2-codex
-  reasoning: minimal
+  model: gpt-5.4
+  reasoning: low
   → Fast, sufficient
 
 Medium task (new feature):
-  model: gpt-5.2-codex
+  model: gpt-5.4
   reasoning: medium
   → Balanced
 
 Complex task (architecture):
-  model: gpt-5.2-codex
+  model: gpt-5.4
   reasoning: high
   → Deep thinking
 
 Critical task (security audit):
-  model: gpt-5.1-codex-max
-  reasoning: high
+  model: gpt-5.4
+  reasoning: xhigh
   → Maximum accuracy
 ```
 
@@ -102,7 +102,7 @@ Claude receives: "Review my changes before I commit"
    - Code quality and maintainability
    - Best practices adherence
    Provide specific, actionable feedback." \
-   --model gpt-5.2-codex \
+   --model gpt-5.4 \
    -c model_reasoning_effort="high" \
    --sandbox read-only \
    --json

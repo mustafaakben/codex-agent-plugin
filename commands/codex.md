@@ -51,10 +51,10 @@ If enabling MCPs is required, ask before modifying config.
 
 ## Complexity mapping
 
-- `simple`: `gpt-5.2-codex`, reasoning `medium`
-- `medium`: `gpt-5.2-codex`, reasoning `high`
-- `complex`: `gpt-5.2-codex`, reasoning `xhigh`
-- `critical`: `gpt-5.1-codex-max`, reasoning `xhigh`
+- `simple`: `gpt-5.4`, reasoning `low`
+- `medium`: `gpt-5.4`, reasoning `medium`
+- `complex`: `gpt-5.4`, reasoning `high`
+- `critical`: `gpt-5.4`, reasoning `xhigh`
 
 ## Modes
 
@@ -69,7 +69,7 @@ Use `codex exec` with explicit model/sandbox/JSON flags.
 Recommend running:
 
 ```bash
-codex --model gpt-5.2-codex --sandbox workspace-write
+codex --model gpt-5.4 --sandbox workspace-write
 ```
 
 ## Output

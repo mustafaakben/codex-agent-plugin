@@ -13,7 +13,7 @@
       "source": "./",
       "name": "agent-codex",
       "description": "Claude Code plugin for Codex delegation, review, research, and safe MCP-assisted workflows.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": {
         "name": "Mustafa Akben"
       },

@@ -2,25 +2,115 @@
 # Codex CLI Configuration Template for agent-codex
 # ============================================================================
 # Use this template to bootstrap .codex/config.toml in a target project.
-# Active settings are enabled by default; curated MCP servers are disabled
-# and can be uncommented as needed.
+# Active settings are enabled by default; optional settings are commented.
+# Copy only the keys you need and adjust values accordingly.
+#
+# Full reference: https://developers.openai.com/codex/config-reference/
+# JSON schema:    https://developers.openai.com/codex/config-schema.json
 # ============================================================================
 
-# Core settings
-model = "gpt-5.2-codex"
-model_reasoning_effort = "high"
-sandbox = "workspace-write"
-approval_policy = "on-request"
+################################################################################
+# Core Model Selection
+################################################################################
 
-# Optional feature flags
-web_search = "live"
+model = "gpt-5.4"
+model_reasoning_effort = "xhigh"
+# model_reasoning_summary = "auto"           # auto | concise | detailed | none
+# model_verbosity = "medium"                 # low | medium | high (Responses API only)
+# model_context_window = 1000000             # Context window tokens (gpt-5.4 supports 1M)
+# model_auto_compact_token_limit = 900000    # Auto-compact history at this threshold
+# personality = "friendly"                   # none | friendly | pragmatic
+# service_tier = "fast"                      # flex | fast
+# review_model = "gpt-5.4"                  # Separate model for /review
+
+################################################################################
+# Execution & Security
+################################################################################
+
+sandbox_mode = "workspace-write"             # read-only | workspace-write | danger-full-access
+approval_policy = "on-request"               # untrusted | on-request | never
+# allow_login_shell = false                  # Disallow login-shell semantics for security
+# hide_agent_reasoning = false               # Suppress reasoning output (useful for CI)
+# show_raw_agent_reasoning = false           # Surface raw reasoning content
+
+################################################################################
+# Web Search
+################################################################################
+
+web_search = "live"                          # disabled | cached | live
+
+################################################################################
+# Developer Customization
+################################################################################
+
+# developer_instructions = ""                # Custom instructions injected into every session
+# commit_attribution = ""                    # Custom commit co-author trailer
+# file_opener = "vscode"                     # vscode | cursor | windsurf | vscode-insiders | none
+
+################################################################################
+# Notifications
+################################################################################
+
+# notify = ["notify-send", "Codex"]          # External program for event alerts
+
+################################################################################
+# Feature Flags
+################################################################################
 
 [features]
-# Enable other features as needed
+# multi_agent = true                         # Multi-agent collaboration
+# js_repl = true                             # JavaScript REPL
+# fast_mode = true                           # Fast mode toggle
+# shell_snapshot = true                      # Shell environment snapshots
+# undo = false                               # Undo support
+# prevent_idle_sleep = false                 # Prevent sleep during active tasks
+# image_generation = false                   # Image generation tool
 
-# ============================================================================
-# Curated MCP servers (verified package names)
-# ============================================================================
+################################################################################
+# Shell Environment Policy
+################################################################################
+
+# [shell_environment_policy]
+# inherit = "all"                            # all | core | none
+# ignore_default_excludes = false            # Keep SECRET/TOKEN auto-filter
+# exclude = []                               # Glob patterns to remove (e.g. ["AWS_*"])
+# include_only = []                          # Whitelist (e.g. ["PATH", "HOME"])
+# set = {}                                   # Explicit overrides (e.g. { EDITOR = "vim" })
+
+################################################################################
+# Sandbox Fine-Tuning
+################################################################################
+
+# [sandbox_workspace_write]
+# writable_roots = []                        # Additional writable directories
+# network_access = false                     # Allow outbound network
+# exclude_tmpdir_env_var = false             # Exclude $TMPDIR from writable
+# exclude_slash_tmp = false                  # Exclude /tmp from writable
+
+################################################################################
+# History
+################################################################################
+
+# [history]
+# persistence = "save-all"                   # save-all | none
+# max_bytes = 104857600                      # Cap at 100 MiB, drop oldest entries
+
+################################################################################
+# TUI (Terminal UI)
+################################################################################
+
+# [tui]
+# notifications = true
+# notification_method = "auto"               # auto | osc9 | bel
+# animations = true
+# show_tooltips = true
+# alternate_screen = "auto"                  # auto | never
+# theme = "catppuccin-mocha"                 # Syntax highlighting theme
+# status_line = ["model", "context-remaining", "git-branch"]
+
+################################################################################
+# Curated MCP Servers (verified package names)
+################################################################################
 
 # Context7 documentation MCP
 # [mcp_servers.context7]
@@ -37,7 +127,7 @@ web_search = "live"
 # tool_timeout_sec = 120
 
 # PostgreSQL MCP
-# Required: DATABASE_URL
+# Required env: DATABASE_URL
 # [mcp_servers.postgres]
 # command = "npx"
 # args = ["-y", "@modelcontextprotocol/server-postgres"]
@@ -51,29 +141,72 @@ web_search = "live"
 # startup_timeout_sec = 5
 # tool_timeout_sec = 30
 
-# GitHub MCP over SSE (OAuth)
+# GitHub MCP (HTTP — OAuth via codex mcp login github)
 # [mcp_servers.github]
-# type = "sse"
-# url = "https://mcp.github.com/sse"
+# url = "https://api.githubcopilot.com/mcp/"
 
-# ============================================================================
+# OpenAI Developer Docs MCP (HTTP)
+# [mcp_servers.openaiDeveloperDocs]
+# url = "https://developers.openai.com/mcp"
+
+# Microsoft Learn Docs MCP (HTTP)
+# [mcp_servers.microsoft-learn]
+# url = "https://learn.microsoft.com/api/mcp"
+
+################################################################################
+# Multi-Agent Configuration
+################################################################################
+
+# [agents]
+# max_threads = 6                            # Max concurrent agent threads
+# max_depth = 1                              # Max agent nesting depth
+# job_max_runtime_seconds = 1800             # Per-worker timeout
+
+# [agents.reviewer]
+# description = "Find correctness, security, and test risks in code."
+# config_file = "./agents/reviewer.toml"
+
+################################################################################
+# Custom Model Providers
+################################################################################
+
+# [model_providers.azure]
+# name = "Azure"
+# base_url = "https://YOUR_PROJECT.openai.azure.com/openai"
+# env_key = "AZURE_OPENAI_API_KEY"
+# wire_api = "responses"
+# query_params = { api-version = "2025-04-01-preview" }
+
+# [model_providers.ollama]
+# name = "Ollama"
+# base_url = "http://localhost:11434/v1"
+
+################################################################################
 # Profiles
-# ============================================================================
+################################################################################
 
 # [profiles.fast]
-# model = "gpt-5.2-codex"
-# model_reasoning_effort = "medium"
+# model = "gpt-5.4"
+# model_reasoning_effort = "low"
+# service_tier = "fast"
 
 # [profiles.thorough]
-# model = "gpt-5.2-codex"
+# model = "gpt-5.4"
 # model_reasoning_effort = "xhigh"
 
 # [profiles.security]
-# model = "gpt-5.1-codex-max"
+# model = "gpt-5.4"
 # model_reasoning_effort = "xhigh"
-# sandbox = "read-only"
+# sandbox_mode = "read-only"
 
 # [profiles.automated]
-# model = "gpt-5.2-codex"
+# model = "gpt-5.4"
 # approval_policy = "never"
-# sandbox = "workspace-write"
+# sandbox_mode = "workspace-write"
+
+################################################################################
+# Projects (trust levels)
+################################################################################
+
+# [projects."/path/to/project"]
+# trust_level = "trusted"

@@ -46,10 +46,21 @@ note = "Append allowed paths to args, e.g. [\"-y\", \"@modelcontextprotocol/serv
 [github]
 description = "GitHub API integration - issues, PRs, repos, actions"
 category = "vcs"
-type = "sse"
-url = "https://mcp.github.com/sse"
+url = "https://api.githubcopilot.com/mcp/"
 use_case = "GitHub operations: create issues, review PRs, manage repos"
-auth = "OAuth (automatic)"
+auth = "OAuth via codex mcp login github"
+
+[openaiDeveloperDocs]
+description = "OpenAI developer documentation and API reference"
+category = "documentation"
+url = "https://developers.openai.com/mcp"
+use_case = "When you need OpenAI API docs, Codex CLI docs, or SDK reference"
+
+[microsoft-learn]
+description = "Microsoft Learn documentation"
+category = "documentation"
+url = "https://learn.microsoft.com/api/mcp"
+use_case = "When you need Microsoft/Azure/.NET/Windows documentation"
 
 # ============================================================================
 # Usage notes

@@ -27,7 +27,7 @@ class CodexSession:
     created_at: datetime = field(default_factory=datetime.now)
     last_accessed: datetime = field(default_factory=datetime.now)
     turns: List[Dict[str, Any]] = field(default_factory=list)
-    model: str = "gpt-5.2-codex"
+    model: str = "gpt-5.4"
     sandbox: str = "workspace-write"
 
 
@@ -55,7 +55,7 @@ class CodexManager:
 
     def create_session(
         self,
-        model: str = "gpt-5.2-codex",
+        model: str = "gpt-5.4",
         sandbox: str = "workspace-write"
     ) -> CodexSession:
         """Create a new Codex session."""
@@ -87,7 +87,7 @@ class CodexManager:
         Args:
             prompt: The task/prompt to execute
             session_id: Optional session ID for multi-turn
-            model: Model to use (defaults to session or gpt-5.2-codex)
+            model: Model to use (defaults to session or gpt-5.4)
             reasoning_effort: minimal|low|medium|high|xhigh
             sandbox: read-only|workspace-write|danger-full-access
             timeout: Execution timeout in seconds
@@ -102,7 +102,7 @@ class CodexManager:
 
         # Build command (prompt is positional argument, NOT -p flag)
         cmd = ["codex", "exec", prompt]
-        cmd.extend(["--model", model or (session.model if session else "gpt-5.2-codex")])
+        cmd.extend(["--model", model or (session.model if session else "gpt-5.4")])
         cmd.extend(["-c", f'model_reasoning_effort="{reasoning_effort}"'])
         cmd.extend(["--sandbox", sandbox or (session.sandbox if session else "workspace-write")])
         cmd.append("--json")
@@ -202,7 +202,7 @@ class CodexManager:
         self,
         target: str = "uncommitted",
         focus: str = "general",
-        model: str = "gpt-5.2-codex",
+        model: str = "gpt-5.4",
         timeout: int = 300
     ) -> Dict[str, Any]:
         """
@@ -280,7 +280,7 @@ def main():
     # Execute command
     exec_parser = subparsers.add_parser("exec", help="Execute a Codex task")
     exec_parser.add_argument("prompt", help="The task prompt")
-    exec_parser.add_argument("-m", "--model", default="gpt-5.2-codex", help="Model to use")
+    exec_parser.add_argument("-m", "--model", default="gpt-5.4", help="Model to use")
     exec_parser.add_argument("-r", "--reasoning", default="medium",
                             choices=["minimal", "low", "medium", "high", "xhigh"])
     exec_parser.add_argument("-s", "--sandbox", default="workspace-write")

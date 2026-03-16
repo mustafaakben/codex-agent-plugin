@@ -35,7 +35,7 @@ allowed-tools:
 
 ### `set`
 - Update one key in `.codex/config.toml`.
-- Supported keys: `model`, `sandbox`, `approval_policy`, `model_reasoning_effort`.
+- Supported keys: `model`, `sandbox_mode`, `approval_policy`, `model_reasoning_effort`, `personality`, `model_verbosity`, `model_context_window`, `web_search`.
 
 ### `enable-mcp`
 - Enable a curated MCP block by uncommenting it in `.codex/config.toml`.
