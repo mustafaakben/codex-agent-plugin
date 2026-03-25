@@ -25,7 +25,7 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "mcp__codex-native__codex",
+        "matcher": "^(mcp__codex-native__codex|mcp__codex-native__codex-reply)$",
         "hooks": [
           {
             "type": "command",

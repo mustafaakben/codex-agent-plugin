@@ -4,11 +4,12 @@
 # and error indicators. Returns additionalContext when relevant.
 
 set -euo pipefail
+trap 'echo "{}" >&1' ERR
 
 INPUT=$(cat)
 
-THREAD_ID=$(echo "$INPUT" | grep -o '"threadId"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*: *"//' | sed 's/"$//' || true)
-HAS_ERROR=$(echo "$INPUT" | grep -qi '"error"\|"Error"\|"ERROR"' && echo "true" || echo "false")
+THREAD_ID=$(echo "$INPUT" | jq -r '.threadId // empty' 2>/dev/null || true)
+HAS_ERROR=$(echo "$INPUT" | jq -e '.error // empty' > /dev/null 2>&1 && echo "true" || echo "false")
 
 CONTEXT=""
 
@@ -29,13 +30,9 @@ if [ -z "$CONTEXT" ]; then
   exit 0
 fi
 
-cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "PostToolUse",
-    "additionalContext": "$CONTEXT"
+jq -n --arg ctx "$CONTEXT" '{
+  hookSpecificOutput: {
+    hookEventName: "PostToolUse",
+    additionalContext: $ctx
   }
-}
-EOF
-
-exit 0
+}'
