@@ -2,7 +2,7 @@
   "$schema": "https://code.claude.com/schemas/marketplace.schema.json",
   "name": "mustafaakben-marketplace",
   "metadata": {
-    "description": "Marketplace for Mustafa Akben Claude Code plugins, including agent-codex."
+    "description": "Claude Code plugins by Mustafa Akben. Includes agent-codex for OpenAI Codex CLI integration."
   },
   "owner": {
     "name": "Mustafa Akben",
@@ -12,8 +12,8 @@
     {
       "source": "./",
       "name": "agent-codex",
-      "description": "Claude Code plugin for Codex delegation, review, research, and safe MCP-assisted workflows.",
-      "version": "1.1.0",
+      "description": "Delegate coding tasks from Claude Code to OpenAI Codex CLI — delegation, review, and research workflows with safe MCP-assisted execution.",
+      "version": "1.1.1",
       "author": {
         "name": "Mustafa Akben"
       },
@@ -24,7 +24,9 @@
         "openai",
         "mcp",
         "automation",
-        "claude-code"
+        "claude-code",
+        "ai-agents",
+        "delegation"
       ]
     }
   ]

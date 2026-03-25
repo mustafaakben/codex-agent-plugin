@@ -1,19 +1,49 @@
 # Changelog
 
+## 1.1.1
+
+### Bug fix: SessionStart hook error on Claude Code 2.1.83+
+
+All three hooks (`SessionStart`, `PreToolUse`, `PostToolUse`) previously used `type: "prompt"`, which injects a text instruction for Claude to interpret. Starting with Claude Code v2.1.83, `SessionStart` hooks require `type: "command"` — a shell script that returns structured JSON. The old `type: "prompt"` approach caused a `SessionStart:startup hook error` on every session launch.
+
+**What changed:**
+
+- Converted all three hooks from `type: "prompt"` to `type: "command"` backed by shell scripts
+- Added `hooks/session-start.sh` — detects `.codex/config.toml` and returns `additionalContext` JSON
+- Added `hooks/pre-tool-use-codex.sh` — returns `decision: "approve"` when config exists, `decision: "block"` when missing (this actually prevents the MCP call from executing, which is stronger than a prompt hint)
+- Added `hooks/post-tool-use-codex.sh` — parses Codex output for `threadId` and error indicators, returns `additionalContext` only when relevant
+- Added `description` field to `hooks.json`
+
+### README rewrite
+
+- Added badges (version, license, stars, Claude Code, Codex CLI)
+- Added architecture diagram showing the Claude Code ↔ Codex CLI flow
+- Added command reference table, agent modes table, curated MCP servers table
+- Added troubleshooting section for common issues
+- Added requirements section with minimum versions
+- Added full plugin structure tree
+- Removed installation steps that duplicated `claude --help` output
+
+### Repository improvements
+
+- Added `.github/ISSUE_TEMPLATE/bug_report.md` and `feature_request.md`
+- Added `SECURITY.md` for vulnerability reporting
+- Set GitHub repo description, topics, and homepage URL
+
 ## 1.1.0
 
-### Model Updates
+### Model updates
 - Updated all model references from `gpt-5.2-codex` / `gpt-5.1-codex-max` to `gpt-5.4` (flagship frontier model).
 - New complexity mapping: simple (low), medium (medium), complex (high), critical (xhigh) — all using `gpt-5.4`.
 - Updated model tables with current recommended models (gpt-5.4, gpt-5.3-codex, gpt-5.3-codex-spark) and legacy/superseded list.
 
-### Configuration Overhaul
+### Configuration overhaul
 - Renamed `sandbox` config key to `sandbox_mode` throughout.
 - Marked `on-failure` approval policy as deprecated.
 - Expanded `codex-config` supported keys: `sandbox_mode`, `personality`, `model_verbosity`, `model_context_window`, `web_search`.
 - Comprehensive config template rewrite with all available settings organized by section: core model, execution, web search, developer customization, notifications, features, shell environment policy, sandbox fine-tuning, history, TUI, multi-agent, model providers, profiles, and projects.
 
-### CLI Reference Rewrite
+### CLI reference rewrite
 - Updated to Codex CLI v0.114.0.
 - Added new commands: `codex review`, `codex fork`, `codex cloud`, `codex apply`, `codex sandbox`, `codex debug`.
 - Added new global flags: `--enable`, `--disable`, `--oss`, `--local-provider`, `--full-auto`, `--no-alt-screen`, `--dangerously-bypass-approvals-and-sandbox`.
@@ -21,18 +51,18 @@
 - Expanded MCP management: `codex mcp get`, `codex mcp login/logout`, HTTP server support (`--url`, `--bearer-token-env-var`).
 - Updated config section with new keys, HTTP MCP examples, and config precedence.
 
-### MCP Updates
+### MCP updates
 - Fixed GitHub MCP from SSE (`mcp.github.com/sse`) to HTTP (`api.githubcopilot.com/mcp/`).
 - Added `openaiDeveloperDocs` HTTP MCP (`developers.openai.com/mcp`).
 - Added `microsoft-learn` HTTP MCP (`learn.microsoft.com/api/mcp`).
 - Added HTTP server support and OAuth login to `codex-mcp-add` command.
 
-### Prompt Guidance (New)
+### Prompt guidance (new)
 - Added `codex-prompt-guidance.md` — comprehensive GPT-5.4 prompt patterns and best practices.
 - Covers: output contracts, tool persistence, completeness contracts, verification loops, dependency checking, research mode, coding autonomy, reasoning effort strategy.
 - Referenced from both `codex-integration` and `codex-ecosystem` skills.
 
-### Command Updates
+### Command updates
 - `codex-review`: Updated to use native `codex review` command with `--uncommitted`, `--base`, `--commit` flags.
 - `codex-mcp-add`: Added STDIO, HTTP, and OAuth server type documentation.
 

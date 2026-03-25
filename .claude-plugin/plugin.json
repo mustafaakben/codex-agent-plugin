@@ -1,7 +1,7 @@
 {
   "name": "agent-codex",
-  "version": "1.1.0",
-  "description": "Comprehensive integration with OpenAI Codex CLI - delegate complex coding tasks to Codex as a powerful coding partner",
+  "version": "1.1.1",
+  "description": "Delegate coding tasks from Claude Code to OpenAI Codex CLI — delegation, review, and research workflows with safe MCP-assisted execution",
   "author": {
     "name": "Mustafa Akben"
   },
@@ -13,7 +13,9 @@
     "delegation",
     "coding-agent",
     "mcp",
-    "automation"
+    "automation",
+    "claude-code",
+    "ai-agents"
   ],
   "license": "MIT"
 }
