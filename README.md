@@ -29,8 +29,8 @@ This plugin connects two AI coding agents. Claude handles orchestration, plannin
 │  Claude Code │                             │  Codex CLI   │
 │  (planning,  │ ◄─── result + threadId ──── │  (execution, │
 │   review)    │                             │   sandbox)   │
-│              │ ──── /codex-reply ────────► │              │
-└──────────────┘     (follow-up on thread)   └──────────────┘
+│              │ ──── codex-reply ─────────► │              │
+└──────────────┘     (follow-up via MCP)     └──────────────┘
 ```
 
 The plugin registers Codex CLI as an MCP server (`codex mcp-server`). Claude Code calls it through standard MCP tool calls. A `threadId` comes back with each response so you can continue the same Codex session.

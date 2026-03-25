@@ -2,13 +2,11 @@
 
 ## Reporting a vulnerability
 
-If you find a security issue in this plugin, please **do not open a public issue**. Instead, email mustafaakben@users.noreply.github.com with:
+If you find a security issue in this plugin, please **do not open a public issue**. Instead, use GitHub's private security advisory feature for this repository (Security tab, then "Report a vulnerability") and provide:
 
 - A description of the vulnerability
 - Steps to reproduce
 - The impact you've identified
-
-You should receive a response within 72 hours.
 
 ## Scope
 

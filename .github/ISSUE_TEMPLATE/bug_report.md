@@ -7,7 +7,7 @@ assignees: ''
 ---
 
 **Plugin version**
-Run `/agent-codex:codex-config show` or check `.claude-plugin/plugin.json`.
+Run `/codex-config show` (or `/agent-codex:codex-config show`) or check `.claude-plugin/plugin.json`.
 
 **Claude Code version**
 Run `claude --version`.
