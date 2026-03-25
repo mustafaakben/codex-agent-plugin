@@ -1,34 +1,67 @@
-# agent-codex Plugin
+<p align="center">
+  <img src="https://img.shields.io/badge/Claude_Code-Plugin-7C3AED?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude Code Plugin" />
+  <img src="https://img.shields.io/badge/Codex_CLI-Integration-00A67E?style=for-the-badge&logo=openai&logoColor=white" alt="Codex CLI" />
+  <img src="https://img.shields.io/github/v/tag/mustafaakben/codex-agent-plugin?style=for-the-badge&label=version&color=blue" alt="Version" />
+  <img src="https://img.shields.io/github/license/mustafaakben/codex-agent-plugin?style=for-the-badge" alt="MIT License" />
+  <img src="https://img.shields.io/github/stars/mustafaakben/codex-agent-plugin?style=for-the-badge&color=gold" alt="Stars" />
+</p>
 
-A Claude Code plugin that integrates with OpenAI Codex CLI for delegation, review, and research workflows.
+# agent-codex
 
-## What This Plugin Provides
+**Delegate coding tasks from Claude Code to OpenAI Codex CLI.**
 
-- Commands for Codex delegation and configuration
-- Agents for delegation, background work, and research
-- Skills for Codex integration and MCP setup
-- Hook prompts for safer Codex usage
-- Bootstrap templates under `.codex/`
+This plugin connects two AI coding agents. Claude handles orchestration, planning, and review. Codex handles execution in its own sandboxed environment. You get the strengths of both without switching terminals.
 
-## Prerequisites
+## What it does
 
-1. Install Codex CLI:
+- **`/codex <task>`** — Send a coding task to Codex CLI and get back the result
+- **`/codex-review`** — Run Codex's native code review on your changes
+- **`/codex-config`** — Bootstrap and manage `.codex/config.toml` per project
+- **`/codex-mcp-add`** — Enable MCP servers (context7, playwright, GitHub, etc.) in your Codex config
+- **`/codex-mcp-search`** — Find MCP servers on npm/GitHub when the curated list isn't enough
+- **Three agent modes** — `codex-delegator` (full tasks), `codex-researcher` (read-only exploration), `codex-background` (async work)
+
+## How it works
+
+```
+┌──────────────┐     MCP (codex-native)     ┌──────────────┐
+│              │ ──── /codex <task> ───────► │              │
+│  Claude Code │                             │  Codex CLI   │
+│  (planning,  │ ◄─── result + threadId ──── │  (execution, │
+│   review)    │                             │   sandbox)   │
+│              │ ──── codex-reply ─────────► │              │
+└──────────────┘     (follow-up via MCP)     └──────────────┘
+```
+
+The plugin registers Codex CLI as an MCP server (`codex mcp-server`). Claude Code calls it through standard MCP tool calls. A `threadId` comes back with each response so you can continue the same Codex session.
+
+**Safety hooks** run on every session:
+- **SessionStart** — Detects if `.codex/config.toml` exists; injects context accordingly
+- **PreToolUse** — Blocks Codex MCP calls if config is missing (asks you to set up first)
+- **PostToolUse** — Captures `threadId` for follow-ups; flags errors in Codex output
+
+## Quick start
+
+### 1. Install Codex CLI
 
 ```bash
 npm install -g @openai/codex
-```
-
-2. Authenticate:
-
-```bash
 codex login
 ```
 
-3. Node.js is required for `npx`-based MCP servers.
+### 2. Install the plugin
 
-## Installation
+**From marketplace (recommended):**
 
-### Install from GitHub (recommended)
+```bash
+# Add the marketplace source (one-time)
+claude plugin marketplace add https://github.com/mustafaakben/codex-agent-plugin
+
+# Install
+claude plugin install agent-codex@mustafaakben-marketplace
+```
+
+**From source:**
 
 ```bash
 git clone https://github.com/mustafaakben/codex-agent-plugin.git
@@ -36,69 +69,36 @@ cd codex-agent-plugin
 claude --plugin-dir .
 ```
 
-### Plugin Cloud / Marketplace install
-
-Add the marketplace source:
-```bash
-claude plugin marketplace add https://github.com/mustafaakben/codex-agent-plugin
-claude plugin marketplace list
-```
-
-Install from this marketplace:
+### 3. Initialize Codex in your project
 
 ```bash
-claude plugin install agent-codex@mustafaakben-marketplace
+# Inside Claude Code, run:
+/codex-config init
 ```
 
-Update/uninstall:
-
-```bash
-claude plugin marketplace update mustafaakben-marketplace
-claude plugin update agent-codex
-claude plugin uninstall agent-codex
-```
-
-This repo includes `.claude-plugin/marketplace.json`, so marketplace install works directly from GitHub.
-
-### Manual project layout (fallback)
-
-If you manually place plugin files in a project, keep this structure:
-
-```text
-<plugin-root>/
-  .claude-plugin/plugin.json
-  commands/
-  agents/
-  skills/
-  hooks/
-  scripts/
-  .mcp.json
-```
+This creates `.codex/config.toml` with defaults. The plugin will not create config files without your confirmation.
 
 ## Commands
 
-Installed plugins commonly expose namespaced commands. Use:
+| Command | What it does |
+|---|---|
+| `/codex <task>` | Delegate a coding task to Codex CLI |
+| `/codex-config [init\|show\|set]` | Manage per-project Codex configuration |
+| `/codex-review [target] [focus]` | Run Codex native code review (`codex review`) |
+| `/codex-mcp-add <server>` | Enable an MCP server in `.codex/config.toml` |
+| `/codex-mcp-search <query>` | Search npm/GitHub for MCP servers |
 
-- `/agent-codex:codex <task>`
-- `/agent-codex:codex-config [action]`
-- `/agent-codex:codex-review [target] [focus]`
-- `/agent-codex:codex-mcp-search <query>`
-- `/agent-codex:codex-mcp-add <server>`
+## Agent modes
 
-## Configuration Model
+| Agent | Use case | Tools available |
+|---|---|---|
+| `codex-delegator` | Full coding tasks with explicit config checks | Codex MCP, Bash, Read, Write, Grep, Glob |
+| `codex-researcher` | Read-only codebase exploration | Codex MCP, Bash, Read, Grep, Glob |
+| `codex-background` | Async work while you keep coding | Codex MCP, Bash, Read, Write, Grep, Glob |
 
-### Files shipped by this plugin repo
+## Default configuration
 
-- `.codex/config.template.toml`
-- `.codex/recommended-mcps.toml`
-
-### File generated in target projects
-
-- `.codex/config.toml`
-
-`config.toml` is created when users explicitly initialize/approve bootstrap.
-
-### Defaults
+The generated `.codex/config.toml` starts with these defaults:
 
 ```toml
 model = "gpt-5.4"
@@ -107,32 +107,85 @@ sandbox_mode = "workspace-write"
 approval_policy = "on-request"
 ```
 
-## Curated MCP Servers
+Adjust via `/codex-config set <key> <value>` or edit the file directly.
 
-The curated, verified set used in templates/docs:
+## Curated MCP servers
 
-- `context7`
-- `playwright`
-- `postgres`
-- `filesystem`
-- `github`
+These verified servers ship in the config template (all disabled by default):
 
-All are disabled by default in template config.
+| Server | Package | What it adds |
+|---|---|---|
+| context7 | `@anthropics/context7-mcp` | Up-to-date library docs |
+| playwright | `@anthropics/playwright-mcp` | Browser automation |
+| postgres | `@anthropics/postgres-mcp` | Database queries |
+| filesystem | `@anthropics/filesystem-mcp` | File operations |
+| github | `api.githubcopilot.com/mcp/` | GitHub API (HTTP MCP) |
 
-## Safety Behavior
+Enable any of them with `/codex-mcp-add <server>`.
 
-- Do not auto-create `.codex/config.toml` at plugin activation.
-- Ask for confirmation before creating or modifying project config files.
-- Ask before enabling MCP blocks in config.
+## Plugin structure
 
-## Validation
+```
+codex-agent-plugin/
+├── .claude-plugin/
+│   ├── plugin.json          # Plugin manifest (name, version, author)
+│   └── marketplace.json     # Marketplace registration
+├── .codex/
+│   ├── config.template.toml # Template for project config
+│   └── recommended-mcps.toml
+├── agents/
+│   ├── codex-delegator.md
+│   ├── codex-researcher.md
+│   └── codex-background.md
+├── commands/
+│   ├── codex.md
+│   ├── codex-config.md
+│   ├── codex-review.md
+│   ├── codex-mcp-add.md
+│   └── codex-mcp-search.md
+├── hooks/
+│   ├── hooks.json           # Hook definitions (SessionStart, PreToolUse, PostToolUse)
+│   ├── session-start.sh     # Detects .codex/config.toml on session open
+│   ├── pre-tool-use-codex.sh   # Guards Codex MCP calls
+│   └── post-tool-use-codex.sh  # Captures threadId and errors
+├── scripts/
+│   ├── codex-wrapper.sh
+│   └── codex-interactive.py
+├── skills/
+│   ├── codex-ecosystem/     # Codex setup and MCP management
+│   └── codex-integration/   # Delegation patterns and CLI reference
+├── .mcp.json                # MCP server registration (codex mcp-server)
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── LICENSE
+└── README.md
+```
 
-Validate plugin manifest:
+## Troubleshooting
+
+**"SessionStart:startup hook error"** — You're on an older version where hooks used `type: "prompt"` instead of `type: "command"`. Update the plugin:
 
 ```bash
-claude plugin validate .
+claude plugin marketplace update mustafaakben-marketplace
+claude plugin update agent-codex
 ```
+
+**Codex MCP calls are blocked** — The PreToolUse hook blocks calls when `.codex/config.toml` is missing. Run `/codex-config init` to create it.
+
+**"codex: command not found"** — Install Codex CLI globally: `npm install -g @openai/codex`
+
+**threadId not captured** — Make sure you're on v1.1.1+ where PostToolUse hooks parse the response correctly.
+
+## Requirements
+
+- [Claude Code](https://claude.com/claude-code) v2.1.77+
+- [OpenAI Codex CLI](https://github.com/openai/codex) v0.114.0+
+- Node.js 20+ (for `npx`-based MCP servers)
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). The short version: branch, make changes, run `claude plugin validate .`, open a PR.
 
 ## License
 
-MIT (see `LICENSE`)
+MIT — see [LICENSE](LICENSE).
