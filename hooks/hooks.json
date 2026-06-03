@@ -1,16 +1,5 @@
 {
   "hooks": {
-    "SessionStart": [
-      {
-        "matcher": ".*",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Check if this project has a .codex/config.toml file. If it is missing and Codex functionality is needed, ask the user for confirmation before creating or modifying project files."
-          }
-        ]
-      }
-    ],
     "PreToolUse": [
       {
         "matcher": "^(mcp__codex-native__codex|mcp__codex-native__codex-reply)$",

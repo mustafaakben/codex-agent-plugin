@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1
+
+### Bug Fixes
+- Removed invalid `SessionStart` prompt-type hook that caused a startup error (`prompt-type hooks are not supported for SessionStart events`). The `.codex/config.toml` check it performed is already enforced by the `PreToolUse` hook at Codex invocation time.
+
 ## 1.1.0
 
 ### Model Updates
